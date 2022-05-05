@@ -3650,7 +3650,6 @@ class TestGit(sourcesteps.SourceStepMixin,
             'got_revision', 'f6ad368298bd941e934a41f3babc827b2aa95a1d', self.sourceName)
         return self.runStep()
 
-
     def test_mode_full_copy_recursive_fetch_fail(self):
         self.setupStep(
             self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
