@@ -3602,6 +3602,232 @@ class TestGit(sourcesteps.SourceStepMixin,
             self.stepClass(repourl="http://github.com/buildbot/buildbot.git",
                            mode='full', method='unknown')
 
+    def test_mode_full_copy_recursive(self):
+        self.setupStep(
+            self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
+                           mode='full', method='copy', submodules='True'))
+
+        self.expectCommands(
+            ExpectShell(workdir='wkdir',
+                        command=['git', '--version'])
+            + ExpectShell.log('stdio', stdout='git version 1.7.5')
+            + 0,
+            Expect('stat', dict(file='wkdir/.buildbot-patched',
+                                logEnviron=True))
+            + 1,
+            Expect('rmdir', dict(dir='wkdir',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            Expect('listdir', {'dir': 'source', 'logEnviron': True,
+                               'timeout': 1200})
+            + Expect.update('files', ['.git'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'sync'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'update', '--init', '--recursive'])
+            + 0,
+            Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
+                             'logEnviron': True, 'timeout': 1200})
+            + 0,
+            ExpectShell(workdir='wkdir',
+                        command=['git', 'rev-parse', 'HEAD'])
+            + ExpectShell.log('stdio', stdout='f6ad368298bd941e934a41f3babc827b2aa95a1d')
+            + 0
+        )
+        self.expectOutcome(result=SUCCESS)
+        self.expectProperty(
+            'got_revision', 'f6ad368298bd941e934a41f3babc827b2aa95a1d', self.sourceName)
+        return self.runStep()
+
+
+    def test_mode_full_copy_recursive_fetch_fail(self):
+        self.setupStep(
+            self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
+                           mode='full', method='copy', submodules='True'))
+
+        self.expectCommands(
+            ExpectShell(workdir='wkdir',
+                        command=['git', '--version'])
+            + ExpectShell.log('stdio', stdout='git version 1.7.5')
+            + 0,
+            Expect('stat', dict(file='wkdir/.buildbot-patched',
+                                logEnviron=True))
+            + 1,
+            Expect('rmdir', dict(dir='wkdir',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            Expect('listdir', {'dir': 'source', 'logEnviron': True,
+                               'timeout': 1200})
+            + Expect.update('files', ['.git'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 1
+        )
+        self.expectOutcome(result=FAILURE)
+        return self.runStep()
+
+    def test_mode_full_copy_recursive_fetch_fail_retry_fail(self):
+        self.setupStep(
+            self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
+                           mode='full', method='copy', submodules='True', retryFetch=True))
+
+        self.expectCommands(
+            ExpectShell(workdir='wkdir',
+                        command=['git', '--version'])
+            + ExpectShell.log('stdio', stdout='git version 1.7.5')
+            + 0,
+            Expect('stat', dict(file='wkdir/.buildbot-patched',
+                                logEnviron=True))
+            + 1,
+            Expect('rmdir', dict(dir='wkdir',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            Expect('listdir', {'dir': 'source', 'logEnviron': True,
+                               'timeout': 1200})
+            + Expect.update('files', ['.git'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 1,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 1
+        )
+        self.expectOutcome(result=FAILURE)
+        return self.runStep()
+
+    def test_mode_full_copy_recursive_fetch_fail_retry_succeed(self):
+        self.setupStep(
+            self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
+                           mode='full', method='copy', submodules='True', retryFetch=True))
+
+        self.expectCommands(
+            ExpectShell(workdir='wkdir',
+                        command=['git', '--version'])
+            + ExpectShell.log('stdio', stdout='git version 1.7.5')
+            + 0,
+            Expect('stat', dict(file='wkdir/.buildbot-patched',
+                                logEnviron=True))
+            + 1,
+            Expect('rmdir', dict(dir='wkdir',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            Expect('listdir', {'dir': 'source', 'logEnviron': True,
+                               'timeout': 1200})
+            + Expect.update('files', ['.git'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 1,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 0,
+            # continue as normal
+            ExpectShell(workdir='source',
+                        command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
+            + 0,
+
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'sync'])
+            + 0,
+
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'update', '--init', '--recursive'])
+            + 0,
+
+            Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
+                             'logEnviron': True, 'timeout': 1200})
+            + 0,
+            ExpectShell(workdir='wkdir',
+                        command=['git', 'rev-parse', 'HEAD'])
+            + ExpectShell.log('stdio', stdout='f6ad368298bd941e934a41f3babc827b2aa95a1d')
+            + 0
+        )
+        self.expectOutcome(result=SUCCESS)
+        return self.runStep()
+
+    def test_mode_full_copy_recursive_fetch_fail_clobberOnFailure(self):
+        self.setupStep(
+            self.stepClass(repourl='http://github.com/buildbot/buildbot.git',
+                           mode='full', method='copy', submodules='True', clobberOnFailure=True))
+
+        self.expectCommands(
+            ExpectShell(workdir='wkdir',
+                        command=['git', '--version'])
+            + ExpectShell.log('stdio', stdout='git version 1.7.5')
+            + 0,
+            Expect('stat', dict(file='wkdir/.buildbot-patched',
+                                logEnviron=True))
+            + 1,
+            Expect('rmdir', dict(dir='wkdir',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            Expect('listdir', {'dir': 'source', 'logEnviron': True,
+                               'timeout': 1200})
+            + Expect.update('files', ['.git'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'fetch', '-f', '-t',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 'HEAD', '--progress'])
+            + 1,
+
+            # clobber and re-clone the source dir here
+            Expect('rmdir', dict(dir='source',
+                                 logEnviron=True,
+                                 timeout=1200))
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'clone',
+                                 'http://github.com/buildbot/buildbot.git',
+                                 '.', '--progress'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'update', '--init', '--recursive'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'sync'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'update', '--init', '--recursive'])
+            + 0,
+            Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
+                             'logEnviron': True, 'timeout': 1200})
+            + 0,
+            ExpectShell(workdir='wkdir',
+                        command=['git', 'rev-parse', 'HEAD'])
+            + ExpectShell.log('stdio', stdout='f6ad368298bd941e934a41f3babc827b2aa95a1d')
+            + 0
+        )
+        self.expectOutcome(result=SUCCESS)
+        return self.runStep()
+
 
 class TestGitPush(steps.BuildStepMixin, config.ConfigErrorsMixin,
                   TestReactorMixin,
