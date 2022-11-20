@@ -1414,7 +1414,7 @@ class TestGit(sourcesteps.SourceStepMixin,
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
             ExpectShell(workdir='wkdir',
-                        command=['git', 'submodule', 'sync'])
+                        command=['git', 'submodule', 'sync', '--recursive'])
             + 0,
             ExpectShell(workdir='wkdir',
                         command=['git', 'submodule', 'update', '--init', '--recursive'])
@@ -1467,7 +1467,7 @@ class TestGit(sourcesteps.SourceStepMixin,
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
             ExpectShell(workdir='wkdir',
-                        command=['git', 'submodule', 'sync'])
+                        command=['git', 'submodule', 'sync', '--recursive'])
             + 0,
             ExpectShell(workdir='wkdir',
                         command=['git', 'submodule', 'update', '--init', '--recursive', '--remote'])
@@ -2105,7 +2105,7 @@ class TestGit(sourcesteps.SourceStepMixin,
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
             ExpectShell(workdir='wkdir',
-                        command=['git', 'submodule', 'sync'])
+                        command=['git', 'submodule', 'sync', '--recursive'])
             + 0,
             ExpectShell(workdir='wkdir',
                         command=['git', 'submodule', 'update', '--init', '--recursive'])
@@ -2157,7 +2157,7 @@ class TestGit(sourcesteps.SourceStepMixin,
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
             ExpectShell(workdir='wkdir',
-                        command=['git', 'submodule', 'sync'])
+                        command=['git', 'submodule', 'sync', '--recursive'])
             + 0,
             ExpectShell(workdir='wkdir',
                         command=['git', 'submodule', 'update', '--init', '--recursive', '--force'])
@@ -2211,7 +2211,7 @@ class TestGit(sourcesteps.SourceStepMixin,
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
             ExpectShell(workdir='wkdir',
-                        command=['git', 'submodule', 'sync'])
+                        command=['git', 'submodule', 'sync', '--recursive'])
             + 0,
             ExpectShell(workdir='wkdir',
                         command=['git', 'submodule', 'update', '--init', '--recursive',
