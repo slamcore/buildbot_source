@@ -1529,7 +1529,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -1578,7 +1578,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=['git', 'submodule', 'update', '--init', '--recursive', '--remote'],
@@ -2287,7 +2287,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -2334,7 +2334,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=['git', 'submodule', 'update', '--init', '--recursive', '--force'],
@@ -2384,7 +2384,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=[
@@ -3778,7 +3778,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='source', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -3912,7 +3912,7 @@ class TestGit(
             ).exit(0),
             # continue as normal
             ExpectShell(workdir='source', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -3968,7 +3968,7 @@ class TestGit(
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
