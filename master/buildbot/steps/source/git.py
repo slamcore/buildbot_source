@@ -296,6 +296,8 @@ class Git(Source, GitStepMixin):
 
         try:
             yield self.mode_incremental()
+            yield self._dovccmd(['clean', '-f', '-f', '-d', '-x'])
+            yield self._cleanSubmodule()
             cmd = remotecommand.RemoteCommand(
                 'cpdir',
                 {
