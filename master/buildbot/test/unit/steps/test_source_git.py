@@ -2552,6 +2552,9 @@ class TestGit(sourcesteps.SourceStepMixin,
             ExpectShell(workdir='source',
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
             + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'clean', '-f', '-f', '-d', '-x'])
+            + 0,
             Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
                              'logEnviron': True, 'timeout': 1200})
             + 0,
@@ -2610,6 +2613,9 @@ class TestGit(sourcesteps.SourceStepMixin,
             + 0,
             ExpectShell(workdir='source',
                         command=['git', 'reset', '--hard', 'FETCH_HEAD', '--'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'clean', '-f', '-f', '-d', '-x'])
             + 0,
             Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
                              'logEnviron': True, 'timeout': 1200})
@@ -3637,6 +3643,12 @@ class TestGit(sourcesteps.SourceStepMixin,
             ExpectShell(workdir='source',
                         command=['git', 'submodule', 'update', '--init', '--recursive'])
             + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'clean', '-f', '-f', '-d', '-x'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'])
+            + 0,
             Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
                              'logEnviron': True, 'timeout': 1200})
             + 0,
@@ -3758,7 +3770,12 @@ class TestGit(sourcesteps.SourceStepMixin,
             ExpectShell(workdir='source',
                         command=['git', 'submodule', 'update', '--init', '--recursive'])
             + 0,
-
+            ExpectShell(workdir='source',
+                        command=['git', 'clean', '-f', '-f', '-d', '-x'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'])
+            + 0,
             Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
                              'logEnviron': True, 'timeout': 1200})
             + 0,
@@ -3815,6 +3832,12 @@ class TestGit(sourcesteps.SourceStepMixin,
             + 0,
             ExpectShell(workdir='source',
                         command=['git', 'submodule', 'update', '--init', '--recursive'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'clean', '-f', '-f', '-d', '-x'])
+            + 0,
+            ExpectShell(workdir='source',
+                        command=['git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'])
             + 0,
             Expect('cpdir', {'fromdir': 'source', 'todir': 'wkdir',
                              'logEnviron': True, 'timeout': 1200})
