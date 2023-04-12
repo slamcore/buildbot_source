@@ -94,8 +94,9 @@ class BuildStatusGeneratorMixin(util.ComparableMixin):
         builder = build['builder']
         scheduler = build['properties'].get('scheduler', [None])[0]
         branch = build['properties'].get('branch', [None])[0]
+        buildername = build['properties'].get('buildername', [None])[0]
 
-        if self.builders is not None and builder['name'] not in self.builders:
+        if self.builders is not None and not (builder['name'] in self.builders or buildername in self.builders):
             return False
         if self.schedulers is not None and scheduler not in self.schedulers:
             return False
