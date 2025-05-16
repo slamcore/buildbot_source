@@ -1529,7 +1529,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -1578,7 +1578,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=['git', 'submodule', 'update', '--init', '--recursive', '--remote'],
@@ -2287,7 +2287,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
@@ -2334,7 +2334,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=['git', 'submodule', 'update', '--init', '--recursive', '--force'],
@@ -2384,7 +2384,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='wkdir', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='wkdir',
                 command=[
@@ -2746,6 +2746,7 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='source', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'clean', '-f', '-f', '-d', '-x']).exit(0),
             ExpectCpdir(fromdir='source', todir='wkdir', log_environ=True, timeout=1200).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'rev-parse', 'HEAD'])
             .stdout('f6ad368298bd941e934a41f3babc827b2aa95a1d')
@@ -2804,6 +2805,7 @@ class TestGit(
                 workdir='source',
                 command=['git', '-c', ssh_command_config, 'checkout', '-f', 'FETCH_HEAD'],
             ).exit(0),
+            ExpectShell(workdir='source', command=['git', 'clean', '-f', '-f', '-d', '-x']).exit(0),
             ExpectCpdir(fromdir='source', todir='wkdir', log_environ=True, timeout=1200).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'rev-parse', 'HEAD'])
             .stdout('f6ad368298bd941e934a41f3babc827b2aa95a1d')
@@ -3778,9 +3780,17 @@ class TestGit(
                 ],
             ).exit(0),
             ExpectShell(workdir='source', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=['git', 'clean', '-f', '-f', '-d', '-x']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=[
+                    'git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'
+                ]
             ).exit(0),
             ExpectCpdir(fromdir='source', todir='wkdir', log_environ=True, timeout=1200).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'rev-parse', 'HEAD'])
@@ -3912,9 +3922,17 @@ class TestGit(
             ).exit(0),
             # continue as normal
             ExpectShell(workdir='source', command=['git', 'checkout', '-f', 'FETCH_HEAD']).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=['git', 'clean', '-f', '-f', '-d', '-x']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=[
+                    'git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'
+                ]
             ).exit(0),
             ExpectCpdir(fromdir='source', todir='wkdir', log_environ=True, timeout=1200).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'rev-parse', 'HEAD'])
@@ -3968,9 +3986,17 @@ class TestGit(
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
             ).exit(0),
-            ExpectShell(workdir='source', command=['git', 'submodule', 'sync']).exit(0),
+            ExpectShell(workdir='source', command=['git', 'submodule', 'sync', '--recursive']).exit(0),
             ExpectShell(
                 workdir='source', command=['git', 'submodule', 'update', '--init', '--recursive']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=['git', 'clean', '-f', '-f', '-d', '-x']
+            ).exit(0),
+            ExpectShell(
+                workdir='source', command=[
+                    'git', 'submodule', 'foreach', '--recursive', 'git clean -f -f -d'
+                ]
             ).exit(0),
             ExpectCpdir(fromdir='source', todir='wkdir', log_environ=True, timeout=1200).exit(0),
             ExpectShell(workdir='wkdir', command=['git', 'rev-parse', 'HEAD'])
