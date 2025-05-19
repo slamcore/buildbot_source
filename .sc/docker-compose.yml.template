@@ -1,0 +1,19 @@
+version: '3'
+services:
+  platform:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - UID=__UID__
+        - GID=__GID__
+        - USERNAME=__USERNAME__
+    volumes:
+      - __SOURCE__:/source
+      - __WORKDIR__/deps:/deps
+      - __WORKDIR__/out:/out
+      - __TOOLS__:/tools:ro
+    entrypoint: /bin/bash
+    stdin_open: true
+    tty: true
+    privileged: true

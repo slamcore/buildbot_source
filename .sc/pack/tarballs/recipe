@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+################################################################################
+in_docker "
+  set -e
+  rm -rf /source/.venv*
+  cd /source
+  make tarballs
+  rm -rf /out/dist
+  cp -r /source/dist /out/dist
+"
