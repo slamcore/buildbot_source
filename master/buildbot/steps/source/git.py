@@ -104,6 +104,7 @@ class Git(Source, GitStepMixin):
         sshKnownHosts=None,
         auth_credentials: tuple[IRenderable | str, IRenderable | str] | None = None,
         git_credentials: GitCredentialOptions | None = None,
+        deep_submodules=False,
         **kwargs,
     ):
         if not getDescription and not isinstance(getDescription, dict):
@@ -127,6 +128,7 @@ class Git(Source, GitStepMixin):
         self.config = config
         self.srcdir = 'source'
         self.origin = origin
+        self.deep_submodules = deep_submodules
 
         super().__init__(**kwargs)
 
@@ -502,7 +504,7 @@ class Git(Source, GitStepMixin):
             cmdArgs = ["submodule", "update", "--init", "--recursive"]
             if self.remoteSubmodules:
                 cmdArgs.append("--remote")
-            if shallowClone:
+            if shallowClone and not self.deep_submodules:
                 cmdArgs.extend(["--depth", str(int(shallowClone))])
             res = yield self._dovccmd(cmdArgs, shallowClone)
 
